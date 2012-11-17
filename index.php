@@ -179,6 +179,49 @@ function coco_backup() {
 
 
 /**
+ * Returns the print link.
+ *
+ * @param  string $name  The name of the co-content.
+ * @return string  The (X)HTML.
+ */
+function Coco_printLink($name)
+{
+    global $su, $plugin_tx;
+    
+    $ptx = $plugin_tx['coco'];    
+    $url = "?$su&amp;coco=$name&amp;print";
+    return '<div class="coco_printlink"><a href="' . $url . '">'
+	. $ptx['printlink'] . '</a></div>';
+}
+
+
+/**
+ * Emits the print view to the browser.
+ *
+ * @return void
+ */
+function Coco_printView()
+{
+    global $s, $onload;
+    
+    $text = evaluate_scripting(Coco_get($_GET['coco'], $s));
+    $onload = 'window.print();';
+    if ($cf['xhtml']['endtags'] == 'true') {
+        echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"',
+	    ' "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
+	    '<html xmlns="http://www.w3.org/1999/xhtml">';
+    } else {
+        echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"',
+            ' "http://www.w3.org/TR/html4/loose.dtd">' . "\n" . '<html>';
+    }
+    echo '<head>', head(), '<meta name="robots" content="noindex">',
+	'</head><body class="print"', onload(), '>',
+	$text, '</body></html>';
+    exit;
+}
+
+
+/**
  * Returns the co-content view depending on the mode.
  *
  * @access public
@@ -218,7 +261,7 @@ function coco($name, $config = FALSE, $height = '100%') {
 	    $words = array_map(create_function('$w', 'return "/".preg_quote($w, "/")."(?!([^<]+)?>)/isU";'), $words);
 	    $text = preg_replace($words, '<span class="highlight_search">\\0</span>', $text);
 	}
-	$o .= $text;
+	$o .= Coco_printLink($name) . $text;
     }
     return $o;
 }
@@ -236,5 +279,15 @@ $pd_router->add_interest('coco_id');
 if ($logout && $_COOKIE['status'] == 'adm' && logincheck()) {
     $o .= coco_backup();
 }
+
+
+/*
+ * Handle the print view.
+ */
+if (isset($_GET['coco'], $_GET['print'])) {
+    //Coco_printView($_GET['coco']); // check valid name
+    XH_afterPluginLoading('Coco_printView');
+}
+
 
 ?>

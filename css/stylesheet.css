@@ -1,3 +1,5 @@
+div.coco_printlink {text-align: right; padding-bottom: 0.3em; border-bottom: 1px solid #888}
+
 /* back-end styles */
 img.coco_plugin_icon {display: block; float: left; margin: 10px 20px 10px 0}
 p.coco_license {clear: both; text-align: justify}

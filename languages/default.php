@@ -15,6 +15,8 @@ $plugin_tx['coco']['confirm_delete']="All contents of \"%s\" will be deleted!";
 
 $plugin_tx['coco']['error_invalid_name']="Co-content names may contain a-z, 0-9 and _ only!";
 
+$plugin_tx['coco']['printlink']="Print";
+
 $plugin_tx['coco']['cf_folder_data']="Path to a folder relative to the CMSimple root directory, where to store the plugin's data. E.g. \"userfiles/coco/\". Leave blank to store into the plugin's data/ folder.";
 
 ?>
